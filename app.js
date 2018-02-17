@@ -20,6 +20,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({extended : true}));
 
+passport.use(new LocalStratergy(Users.authenticate()));
 passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser());
 
@@ -59,6 +60,19 @@ app.post("/register",function (req, res) {
         });
     });
 });
+
+//LOGIN ROUTES
+app.get("/login",function (req, res) {
+   res.render("login");
+});
+//middleware
+app.post("/login",passport.authenticate("local",{
+        successRedirect : "/secret",
+        failureRedirect : "/login"
+    }),function (req, res) {
+});
+
+
 
 app.listen(3000, function () {
    console.log("Auth Demo started on port 3000");
